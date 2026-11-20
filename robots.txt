@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /messages.html
+Disallow: /profile.html
+Disallow: /settings.html
+Disallow: /.netlify/
+
+Sitemap: https://golden-wheel-cars.netlify.app/sitemap.xml

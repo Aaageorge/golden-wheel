@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Wheel | Luxury Cars Marketplace - Buy & Sell Premium Vehicles</title>
+    <meta name="description" content="Discover premium luxury sports cars at Golden Wheel. Browse and buy luxury vehicles.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0D0D0D">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+
+    <!-- Loading Page -->
+    <div id="loaderOverlay" class="loader-overlay">
+        <div class="loader-wheel-container">
+            <!-- Gold Car Wheel SVG -->
+            <svg class="loader-wheel" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer rim -->
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#D4AF37" stroke-width="3"/>
+                <!-- Inner rim -->
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#D4AF37" stroke-width="2"/>
+                <!-- Center hub -->
+                <circle cx="50" cy="50" r="12" fill="#D4AF37"/>
+                <circle cx="50" cy="50" r="8" fill="#1A1A1A"/>
+                <!-- Spokes -->
+                <line x1="50" y1="5" x2="50" y2="20" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+                <line x1="50" y1="80" x2="50" y2="95" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+                <line x1="5" y1="50" x2="20" y2="50" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+                <line x1="80" y1="50" x2="95" y2="50" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+                <!-- Diagonal spokes -->
+                <line x1="18" y1="18" x2="29" y2="29" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+                <line x1="71" y1="71" x2="82" y2="82" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+                <line x1="82" y1="18" x2="71" y2="29" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+                <line x1="18" y1="82" x2="29" y2="71" stroke="#D4AF37" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <div class="loader-center"></div>
+        </div>
+
+        <div class="loader-text">Loading...</div>
+        <div class="loader-progress">
+            <div class="loader-progress-bar"></div>
+        </div>
+    </div>
+
+    <div id="chatToast" class="chat-toast" role="status" aria-live="polite"></div>
+
+    <div id="chatModal" class="modal">
+        <div class="modal-content chat-modal-content">
+            <div style="display:flex; justify-content: space-between; align-items:center; gap:12px; padding: 6px 4px 10px 4px;">
+                <h2 style="text-align: left; color: var(--gold); margin: 0;">Messages</h2>
+                <button onclick="closeChatModal()" class="close-btn" aria-label="Close">×</button>
+            </div>
+            <div class="chat-wrap">
+                <div class="chat-sidebar">
+                    <div class="chat-sidebar-header">
+                        <h3>Inbox</h3>
+                        <button class="btn-outline" style="margin:0; padding:8px 14px;" onclick="refreshInbox()">Refresh</button>
+                    </div>
+                    <div class="chat-search-wrap">
+                        <input id="chatUserSearchInput" class="chat-search-input" type="text" placeholder="Search users by name..." oninput="handleUserSearch()">
+                        <div id="chatUserSearchResults" class="chat-search-results"></div>
+                        <div class="chat-search-hint">Type a name to start a new chat.</div>
+                    </div>
+                    <div id="chatThreadList" class="chat-thread-list"></div>
+                </div>
+                <div class="chat-main">
+                    <div class="chat-main-header">
+                        <div id="chatMainTitle" class="chat-main-title">Select a conversation</div>
+                        <button class="btn-outline" style="margin:0; padding:8px 14px;" onclick="closeChatThread()">Close</button>
+                    </div>
+                    <div id="chatMessages" class="chat-messages"></div>
+                    <div class="chat-compose">
+                        <input id="chatInput" class="chat-input" type="text" placeholder="Write a message..." onkeydown="if(event.key==='Enter'){ sendChatMessage(); }">
+                        <button id="chatSendBtn" class="btn-gold chat-send-btn" onclick="sendChatMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sideMenu" class="side-menu">
+        <a onclick="toggleMenu()">× Close Menu</a>
+        <a href="index.html">🏠 Home</a>
+        <a href="index.html?filter=mine">🚗 My Listings</a>
+        <a href="about.html">ℹ️ About Us</a>
+        <a href="finance.html">🧮 Finance Calculator</a>
+        <a id="inboxLink" href="messages.html" style="display:none;">💬 Messages</a>
+        <a id="adminLink" onclick="adminLogin(); toggleMenu();" style="display:none;">🔐 Admin Access</a>
+        <a id="logoutLink" onclick="adminLogout(); toggleMenu();" style="display:none; color: #ff4d4d;">🚪 Logout Admin</a>
+        <a id="settingsLink" href="settings.html" style="display:none;">⚙️ Settings</a>
+        <a id="userVerificationLink" onclick="openUserVerification(); toggleMenu();" style="display:none;">✅ Verify Accounts</a>
+        <a id="manageAdminsLink" onclick="openAdminManagement(); toggleMenu();" style="display:none;">👑 Manage Admins</a>
+        
+        <div class="divider"></div>
+        
+        <!-- Auth Section -->
+        <div id="authButtons">
+            <a href="signin.html">👤 Sign In</a>
+            <a href="signup.html">✉️ Sign Up</a>
+        </div>
+        
+        <!-- User Info (shown when logged in) -->
+        <div id="userInfo">
+            <div style="padding: 15px 30px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 15px;">
+                <img id="sideProfilePic" class="profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D4AF37'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" onclick="location.href='profile.html'" alt="Profile">
+                <div>
+                    <span class="user-name" id="userName"></span>
+                    <span class="user-email" id="userEmail"></span>
+                    <span class="user-email" id="userVerifiedStatus" style="margin-top: 4px;"></span>
+                </div>
+            </div>
+            <a href="profile.html" style="color: var(--gold);">👤 View Profile</a>
+            <a onclick="signOutUser(); toggleMenu();" style="color: #ff4d4d;">🚪 Logout</a>
+        </div>
+    </div>
+
+    <header class="head" style="justify-content: flex-start;">
+        <button class="hamburger-icon" onclick="toggleMenu()">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </button>
+        <div class="site-title-container" style="display: flex; align-items: center; margin-left: 20px;">
+            <h2 id="siteTitle" class="site-title" style="font-family: 'Roboto', sans-serif; font-weight: 700; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin: 0;">Golden Wheel</h2>
+            <div class="car-wheel-logo" style="width: 32px; height: 32px; margin-left: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; animation: rotateWheel 8s linear infinite; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">🛞</div>
+        </div>
+        <div class="header-actions" style="margin-left: auto; display: flex; gap: 10px;">
+            </div>
+    </header>
+    
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Search for your dream car..." oninput="handleSearch()">
+            <button onclick="toggleFiltersPanel()" class="btn-outline advanced-search-btn">
+                🔍 Advanced Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Advanced Filters Panel -->
+    <div id="filtersPanel" class="filters-panel">
+        <div class="filters-header">
+            <h3>
+                <svg viewBox="0 0 24 24"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
+                Advanced Filters
+            </h3>
+            <button class="toggle-filters-btn" onclick="toggleFiltersPanel()">✕ Close</button>
+        </div>
+        
+        <!-- Quick Filters -->
+        <div class="quick-filters">
+            <button class="quick-filter-btn active" onclick="quickFilter('all', this)">All Cars</button>
+            <button class="quick-filter-btn" onclick="quickFilter('under-50k', this)">Under $50K</button>
+            <button class="quick-filter-btn" onclick="quickFilter('50k-100k', this)">$50K - $100K</button>
+            <button class="quick-filter-btn" onclick="quickFilter('over-100k', this)">Over $100K</button>
+            <button class="quick-filter-btn" onclick="quickFilter('electric', this)">Electric</button>
+            <button class="quick-filter-btn" onclick="quickFilter('sport', this)">Sport Cars</button>
+            <button class="quick-filter-btn" onclick="quickFilter('suv', this)">SUVs</button>
+        </div>
+        
+        <!-- Main Filters Grid -->
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label>
+                    <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.9-3.5 3.61 0 2.21 1.92 2.89 4.09 3.43 1.74.46 2.93.89 2.93 2.01 0 1.14-.96 1.7-2.5 1.7-1.5 0-2.4-.6-2.55-1.5h-2.3c.1 1.35 1.15 2.55 2.85 2.85v2.25h3v-2.2c1.66-.36 2.8-1.6 2.8-3.1 0-2.1-1.85-2.95-3.4-3.2z"/></svg>
+                    Price Range
+                </label>
+                <div class="price-range">
+                    <input type="number" id="filterMinPrice" placeholder="Min $">
+                    <span>to</span>
+                    <input type="number" id="filterMaxPrice" placeholder="Max $">
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label>
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                    Year
+                </label>
+                <div class="year-range">
+                    <input type="number" id="filterMinYear" placeholder="From">
+                    <span>to</span>
+                    <input type="number" id="filterMaxYear" placeholder="To">
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label>
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    Transmission
+                </label>
+                <select id="filterTransmission">
+                    <option value="">All</option>
+                    <option value="Automatic">Automatic</option>
+                    <option value="Manual">Manual</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>
+                    <svg viewBox="0 0 24 24"><path d="M19.77 7.23l.01-.01-3.72-3.72L15 4.56l2.11 2.11c-.94.36-1.61 1.26-1.61 2.33a2.5 2.5 0 0 0 2.5 2.5c.36 0 .69-.08 1-.21v7.21c0 .55-.45 1-1 1s-1-.45-1-1V14c0-1.1-.9-2-2-2h-1V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v16h10v-7.5h1.5v5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V9c0-.69-.28-1.32-.73-1.77zM12 10H6V5h6v5z"/></svg>
+                    Fuel Type
+                </label>
+                <select id="filterFuel">
+                    <option value="">All</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Electric">Electric</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    Car Make/Model
+                </label>
+                <input type="text" id="filterMake" placeholder="e.g. BMW, Mercedes, Toyota">
+            </div>
+            
+            <div class="filter-group">
+                <label>
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    Condition
+                </label>
+                <select id="filterCondition">
+                    <option value="">All</option>
+                    <option value="No Accidents">No Accidents</option>
+                    <option value="Minor Accident">Minor Accident</option>
+                    <option value="Major Accident">Major Accident</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Filter Actions -->
+        <div class="filter-actions">
+            <button class="filter-btn apply" onclick="applyFilters()">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Apply Filters
+            </button>
+            <button class="filter-btn reset" onclick="resetFilters()">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Reset
+            </button>
+        </div>
+        
+        <!-- Active Filters -->
+        <div id="activeFiltersContainer" class="active-filters" style="display: none;">
+            <span class="active-filters-label">Active Filters:</span>
+            <div id="activeFiltersTags"></div>
+            <span class="clear-all-filters" onclick="clearAllFilters()">Clear All</span>
+        </div>
+    </div>
+    
+    <!-- Results Count -->
+    <div id="resultsCount" class="results-count"></div>
+
+<center>
+        <a href="sell.html" class="btn-gold">+ ADD NEW LISTING</a>
+    </center>
+
+    <div class="all-body" id="carGrid"></div>
+
+    <div id="compareBar" class="compare-bar" role="region" aria-label="Car comparison">
+        <div id="compareCount" class="compare-count">Compare: 0</div>
+        <div class="compare-actions">
+            <button id="openCompareBtn" class="primary" onclick="openCompareModal()" disabled>Open Comparison</button>
+            <button onclick="clearCompare()">Clear</button>
+        </div>
+    </div>
+
+    <div id="compareModal" class="modal">
+        <div class="modal-content" style="max-width: 1100px; width: min(1100px, 96vw);">
+            <div style="display:flex; justify-content: space-between; align-items:center; gap:12px;">
+                <h2 style="text-align: left; color: var(--gold); margin: 0;">Car Comparison</h2>
+                <button onclick="closeModal('compareModal')" class="close-btn" aria-label="Close">×</button>
+            </div>
+            <div style="margin-top: 14px; color: var(--text-secondary);" id="compareHint"></div>
+            <div style="margin-top: 14px; overflow:auto;" id="compareTableWrap"></div>
+        </div>
+    </div>
+
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <h2 style="text-align: center; color: var(--gold); margin-bottom: 20px;">New Listing</h2>
+            
+            <label>Car Name & Model</label>
+            <input type="text" id="carName" placeholder="e.g. BMW M4">
+            
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Year</label>
+                    <input type="number" id="carYear" placeholder="2024">
+                </div>
+                <div style="flex:1">
+                    <label>Price ($)</label>
+                    <input type="number" id="carPrice" placeholder="USD">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Engine Type</label>
+                    <input type="text" id="carEngine" placeholder="e.g. V8 4.0L">
+                </div>
+                <div style="flex:1">
+                    <label>Transmission</label>
+                    <select id="carGear">
+                        <option value="Automatic">Automatic</option>
+                        <option value="Manual">Manual</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Fuel Type</label>
+                    <select id="carFuel" onchange="toggleFuelField(this.value)">
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <label id="fuelLabel">Fuel Consumption</label>
+                    <input type="text" id="carFuelInfo" placeholder="e.g. 8L/100km">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Accidents?</label>
+                    <select id="carAccidents">
+                        <option value="No Accidents">No Accidents</option>
+                        <option value="Minor Accident">Minor Accident</option>
+                        <option value="Major Accident">Major Accident</option>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <label>Paint Status</label>
+                    <select id="carPaint">
+                        <option value="Original Paint">Original Paint</option>
+                        <option value="Partially Painted">Partially Painted</option>
+                        <option value="Fully Repainted">Fully Repainted</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                <div style="flex:1">
+                    <label>WhatsApp Number</label>
+                    <input type="text" id="carPhone" placeholder="e.g. 962700000000">
+                </div>
+                <div style="flex:1; display: flex; align-items: center; gap: 5px;">
+                    <input type="checkbox" id="carFirstOwner" style="width: 20px; margin: 0;">
+                    <label style="margin: 0;">1st Owner</label>
+                </div>
+            </div>
+
+            <label>Photos (Minimum 7 images, 480×320 resolution each)</label>
+            <input type="file" id="carImages" multiple accept="image/*">
+
+            <button id="publishBtn" class="BUY" style="background-color: var(--gold); color: black;">PUBLISH NOW</button>
+            <button onclick="closeModal('uploadModal')" style="background: none; border: none; color: #888; width: 100%; margin-top: 10px; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Edit Listing Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h2 style="text-align: center; color: var(--gold); margin-bottom: 20px;">Edit Listing</h2>
+            
+            <label>Car Name & Model</label>
+            <input type="text" id="editCarName" placeholder="e.g. BMW M4">
+            
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Year</label>
+                    <input type="number" id="editCarYear" placeholder="2024">
+                </div>
+                <div style="flex:1">
+                    <label>Price ($)</label>
+                    <input type="number" id="editCarPrice" placeholder="USD">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Engine Type</label>
+                    <input type="text" id="editCarEngine" placeholder="e.g. V8 4.0L">
+                </div>
+                <div style="flex:1">
+                    <label>Transmission</label>
+                    <select id="editCarGear">
+                        <option value="Automatic">Automatic</option>
+                        <option value="Manual">Manual</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Fuel Type</label>
+                    <select id="editCarFuel" onchange="toggleEditFuelField(this.value)">
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <label id="editFuelLabel">Fuel Consumption</label>
+                    <input type="text" id="editCarFuelInfo" placeholder="e.g. 8L/100km">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1">
+                    <label>Accidents?</label>
+                    <select id="editCarAccidents">
+                        <option value="No Accidents">No Accidents</option>
+                        <option value="Minor Accident">Minor Accident</option>
+                        <option value="Major Accident">Major Accident</option>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <label>Paint Status</label>
+                    <select id="editCarPaint">
+                        <option value="Original Paint">Original Paint</option>
+                        <option value="Partially Painted">Partially Painted</option>
+                        <option value="Fully Repainted">Fully Repainted</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                <div style="flex:1">
+                    <label>WhatsApp Number</label>
+                    <input type="text" id="editCarPhone" placeholder="e.g. 962700000000">
+                </div>
+                <div style="flex:1; display: flex; align-items: center; gap: 5px;">
+                    <input type="checkbox" id="editCarFirstOwner" style="width: 20px; margin: 0;">
+                    <label style="margin: 0;">1st Owner</label>
+                </div>
+            </div>
+
+            <label>Additional Images (optional)</label>
+            <input type="file" id="editCarImages" multiple accept="image/*">
+            <small style="color: #888; display: block; margin-bottom: 15px;">Add new images or keep existing ones</small>
+
+            <button id="updateBtn" class="BUY" style="background-color: var(--gold); color: black;">UPDATE LISTING</button>
+            <button onclick="closeModal('editModal')" style="background: none; border: none; color: #888; width: 100%; margin-top: 10px; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="sliderModal" class="modal">
+        <div class="modal-content">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('sliderModal')">&times;</span>
+            <h2 id="modalTitle" style="color: var(--gold); margin-top: 0;"></h2>
+            <img id="modalImg" src="" style="width: 100%; border-radius: 10px; margin-bottom: 15px; border: 1px solid #333;">
+            <div class="info-grid" id="carDetailsInfo"></div>
+            <button class="BUY" id="modalWaBtn">CONTACT VIA WHATSAPP</button>
+        </div>
+    </div>
+
+    <!-- Sign In Modal -->
+    <div id="signInModal" class="modal auth-modal">
+        <div class="modal-content" style="position: relative;">
+            <span class="close-btn" onclick="closeModal('signInModal')">&times;</span>
+            <h2>Welcome Back</h2>
+            <div id="signinError" class="error-msg"></div>
+            
+            <!-- Social Login Section -->
+            <div class="social-login-section">
+                <div class="social-login-title"><span>Continue with</span></div>
+                
+                <!-- Google Sign In -->
+                <button id="googleSignInBtn" class="social-btn google-btn" onclick="signInWithGoogle()">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                
+                <!-- Facebook Sign In - Hidden -->
+                <!-- <button id="facebookSignInBtn" class="social-btn facebook-btn" onclick="signInWithFacebook()">
+                    <svg viewBox="0 0 24 24" fill="white">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Continue with Facebook
+                </button> -->
+            </div>
+            
+            <div class="divider-text"><span>OR</span></div>
+            
+            <label>Email Address</label>
+            <input type="email" id="signinEmail" placeholder="Enter your email">
+            
+            <label>Password</label>
+            <input type="password" id="signinPassword" placeholder="Enter your password">
+            
+            <button id="signinBtn" class="auth-btn">SIGN IN</button>
+            
+            <p class="toggle-text">
+                Don't have an account? 
+                <span class="toggle-link" onclick="switchToSignup()">Sign Up</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signupModal" class="modal auth-modal">
+        <div class="modal-content" style="position: relative;">
+            <span class="close-btn" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Create Account</h2>
+            <div id="signupError" class="error-msg"></div>
+            <div id="signupSuccess" class="success-msg"></div>
+            
+            <label>Full Name</label>
+            <input type="text" id="signupName" placeholder="Enter your full name">
+            
+            <label>Email Address</label>
+            <input type="email" id="signupEmail" placeholder="Enter your email">
+            
+            <label>Phone Number</label>
+            <input type="tel" id="signupPhone" placeholder="e.g. 962700000000">
+            
+            <label>Password</label>
+            <input type="password" id="signupPassword" placeholder="Create a secure password" maxlength="50">
+            
+            <!-- Password Requirements Display -->
+            <div class="password-requirements">
+                <div class="password-requirements-title">Password Requirements:</div>
+                <div class="requirement" id="signup-req-length">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    At least 8 characters
+                </div>
+                <div class="requirement" id="signup-req-upper">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    One uppercase letter (A-Z)
+                </div>
+                <div class="requirement" id="signup-req-lower">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    One lowercase letter (a-z)
+                </div>
+                <div class="requirement" id="signup-req-number">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    One number (0-9)
+                </div>
+                <div class="requirement" id="signup-req-special">
+                    <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                    One special character (!@#$%^&*)
+                </div>
+            </div>
+            
+            <!-- Password Strength Indicator -->
+            <div class="password-strength-bar">
+                <div id="signupPasswordStrengthFill" class="password-strength-fill"></div>
+            </div>
+            
+            <label>Profile Picture (Optional)</label>
+            <div id="signupDropZone" class="drop-zone" onclick="document.getElementById('signupProfilePic').click()">
+                <div class="drop-zone-icon">📷</div>
+                <div class="drop-zone-text">
+                    Drag & Drop your photo here<br>
+                    or <span>click to browse</span>
+                </div>
+                <input type="file" id="signupProfilePic" accept="image/*" onchange="handleSignupDropZoneChange(event)">
+            </div>
+            <div id="signupPicPreview" style="display:none; text-align: center; margin-bottom: 15px;">
+                <img id="signupPicPreviewImg" src="" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold);">
+                <button onclick="clearSignupProfilePic(); event.stopPropagation();" style="background: #e74c3c; border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 5px; font-size: 12px;">Remove</button>
+            </div>
+            
+            <!-- Social Login Section for Sign Up -->
+            <div class="social-login-section">
+                <div class="social-login-title"><span>Or sign up with</span></div>
+                
+                <!-- Google Sign Up -->
+                <button id="googleSignUpBtn" class="social-btn google-btn" onclick="signUpWithGoogle()">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                
+                <!-- Facebook Sign Up - Hidden -->
+                <!-- <button id="facebookSignUpBtn" class="social-btn facebook-btn" onclick="signUpWithFacebook()">
+                    <svg viewBox="0 0 24 24" fill="white">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Continue with Facebook
+                </button> -->
+            </div>
+            
+            <div class="divider-text"><span>OR</span></div>
+            
+            <button id="signupBtn" class="auth-btn">CREATE ACCOUNT</button>
+            
+            <button onclick="closeModal('signupModal')" class="auth-btn" style="background: #6c757d; margin-top: 10px;">EXIT</button>
+            
+            <p class="toggle-text">
+                Already have an account? 
+                <span class="toggle-link" onclick="switchToSignin()">Sign In</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('settingsModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--gold);">⚙️ Settings</h2>
+            
+            <div id="settingsError" class="error-msg"></div>
+            <div id="settingsSuccess" class="success-msg"></div>
+            
+            <label>👤 Admin Email (for admin access)</label>
+            <input type="email" id="adminEmailSetting" placeholder="e.g. admin@example.com">
+            <p style="color: #888; font-size: 12px; margin-bottom: 15px;">
+                Only this email will have admin permissions after signing in.
+            </p>
+
+            <!-- Admin WhatsApp Verification Number -->
+            <label>📱 Admin WhatsApp Number (for email verification)</label>
+            <input type="text" id="adminWhatsapp" placeholder="e.g. 962700000000">
+            <p style="color: #888; font-size: 12px; margin-bottom: 15px;">
+                This number will receive verification requests when users want to change their email.
+            </p>
+            
+            <!-- Change Password Section -->
+            <button class="change-password-section" onclick="openChangePasswordModal()" style="width: 100%; text-align: left; border: 2px solid #333; border-radius: 12px; background: linear-gradient(135deg, #252525, #1a1a1a); padding: 20px; margin-bottom: 20px; cursor: pointer; transition: all 0.3s ease;">
+                <h4 style="color: var(--gold); margin: 0 0 8px 0; display: flex; align-items: center; gap: 10px; font-size: 16px;">
+                    <svg viewBox="0 0 24 24" style="width: 24px; height: 24px; fill: var(--gold);">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                    Change Admin Password
+                </h4>
+                <p style="color: #888; font-size: 13px; margin: 0;">Update your admin panel password securely</p>
+            </button>
+            
+            <button id="saveSettingsBtn" class="auth-btn">SAVE SETTINGS</button>
+        </div>
+    </div>
+
+    <div id="userVerificationModal" class="modal auth-modal" style="display:none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('userVerificationModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--gold);">✅ Account Verification</h2>
+            <div id="userVerificationError" class="error-msg"></div>
+            <input type="text" id="userVerificationSearchEmail" placeholder="Search by email..." style="width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 10px; border: 1px solid #333; background: #111; color: #fff; outline: none;">
+            <div id="userVerificationList" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <div id="adminMgmtModal" class="modal auth-modal" style="display:none;">
+        <div class="modal-content" style="max-width: 600px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('adminMgmtModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--gold);">👑 Manage Admins</h2>
+            <div id="adminMgmtError" class="error-msg"></div>
+            <p style="color:#888; font-size:13px; text-align:center; margin: 6px 0 0;">Only the main controllers can add or remove admins. A user must sign in once before they can be made an admin.</p>
+            <input type="text" id="adminMgmtSearch" placeholder="Search by name or email..." style="width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 10px; border: 1px solid #333; background: #111; color: #fff; outline: none;">
+            <div id="adminMgmtList" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <div id="adminAuthModal" class="modal auth-modal">
+        <div class="modal-content" style="position: relative; max-width: 450px; text-align: center;">
+            <span class="close-btn" onclick="closeModal('adminAuthModal')">&times;</span>
+            <h2>Admin Login</h2>
+            <div id="adminAuthError" class="error-msg"></div>
+
+            <label>Email</label>
+            <input type="email" id="adminEmailInput" placeholder="Enter admin email">
+
+            <label>Password</label>
+            <input type="password" id="adminPasswordInput" placeholder="Enter admin password">
+
+            <button id="adminAuthBtn" class="auth-btn">SIGN IN</button>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal change-password-modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('changePasswordModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--gold);">🔐 Change Admin Password</h2>
+            
+            <div id="changePasswordError" class="error-msg"></div>
+            <div id="changePasswordSuccess" class="success-msg"></div>
+            
+            <!-- Old Password -->
+            <label>🔑 Old Password</label>
+            <input type="password" id="oldPassword" placeholder="Enter old password" autocomplete="off">
+            
+            <!-- New Password -->
+            <label>🔒 New Password</label>
+            <input type="password" id="newPassword" placeholder="Enter new password" autocomplete="off">
+            
+            <button id="changePasswordBtn" class="auth-btn" style="background: linear-gradient(135deg, var(--gold), #c9a030);" onclick="changeAdminPassword()">
+                💾 SAVE NEW PASSWORD
+            </button>
+            
+            <button onclick="closeModal('changePasswordModal')" style="background: none; border: none; color: #888; width: 100%; margin-top: 10px; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Change Email Modal -->
+    <div id="changeEmailModal" class="modal change-email-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('changeEmailModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--gold);">📧 Change Email</h2>
+            
+            <div id="changeEmailError" class="error-msg"></div>
+            <div id="changeEmailSuccess" class="success-msg"></div>
+            
+            <label>Current Email</label>
+            <input type="email" id="currentEmail" disabled>
+            
+            <label>New Email Address</label>
+            <input type="email" id="newEmail" placeholder="Enter your new email">
+            
+            <!-- Step 1: Request verification code -->
+            <div id="requestCodeSection">
+                <button id="requestCodeBtn" class="btn-gold" style="width: 100%;">REQUEST VERIFICATION CODE</button>
+                <p style="color: #888; font-size: 12px; text-align: center; margin-top: 10px;">
+                    A verification code will be sent to your WhatsApp number
+                </p>
+            </div>
+            
+            <!-- Step 2: Enter verification code -->
+            <div id="verifyCodeSection" style="display: none;">
+                <label>Verification Code</label>
+                <input type="text" id="verificationCode" placeholder="Enter the 6-digit code" maxlength="6">
+                
+                <button id="verifyCodeBtn" class="auth-btn">VERIFY & CHANGE EMAIL</button>
+                <button onclick="cancelEmailChange()" style="background: none; border: none; color: #888; width: 100%; margin-top: 10px; cursor: pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Us Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('aboutModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--gold); margin-bottom: 30px;">ℹ️ About Golden Wheel</h2>
+            
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div style="font-size: 60px; margin-bottom: 15px;">🏎️</div>
+                <h3 style="color: var(--gold); margin-bottom: 10px;">Golden Wheel</h3>
+                <p style="color: #ccc; font-style: italic;">Luxury Cars Marketplace - Buy & Sell Premium Vehicles</p>
+            </div>
+            
+            <div class="about-section">
+                <h4 style="color: var(--gold); margin-bottom: 15px;">🎯 Our Mission</h4>
+                <p style="line-height: 1.6; color: #ddd; margin-bottom: 20px;">
+                    At Golden Wheel, we are passionate about connecting luxury car enthusiasts with their dream vehicles. 
+                    Our mission is to provide a premium, trustworthy platform where buyers and sellers of high-end automobiles 
+                    can connect with confidence and ease.
+                </p>
+            </div>
+            
+            <div class="about-section">
+                <h4 style="color: var(--gold); margin-bottom: 15px;">🚗 What We Offer</h4>
+                <ul style="color: #ddd; line-height: 1.8; padding-right: 20px;">
+                    <li><strong>Premium Vehicle Listings:</strong> Carefully curated selection of luxury and sports cars</li>
+                    <li><strong>Secure Transactions:</strong> Safe and protected buying and selling process</li>
+                    <li><strong>Detailed Listings:</strong> Comprehensive information with high-quality images</li>
+                    <li><strong>Direct Communication:</strong> Connect directly with sellers and buyers</li>
+                    <li><strong>User Verification:</strong> Verified accounts for enhanced trust and security</li>
+                    <li><strong>Advanced Search:</strong> Find your perfect vehicle with smart filtering options</li>
+                </ul>
+            </div>
+            
+            <div class="about-section">
+                <h4 style="color: var(--gold); margin-bottom: 15px;">❤️ Why We Love What We Do</h4>
+                <p style="line-height: 1.6; color: #ddd; margin-bottom: 20px;">
+                    We are car enthusiasts ourselves, and we understand the excitement and emotion that comes with 
+                    luxury automobiles. Every car has a story, and we're here to help those stories continue. 
+                    From classic collectibles to modern supercars, we celebrate automotive excellence in all its forms.
+                </p>
+                <p style="line-height: 1.6; color: #ddd;">
+                    Our platform is built on trust, quality, and a shared passion for extraordinary vehicles. 
+                    We believe that finding or selling a luxury car should be as premium as the vehicles themselves.
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                <p style="color: var(--gold); font-weight: bold; margin-bottom: 10px;">Join Our Community</p>
+                <p style="color: #ccc; font-size: 14px;">Experience the luxury car marketplace redefined.</p>
+                <button onclick="closeModal('aboutModal'); openSignUp();" class="btn-gold" style="margin-top: 15px;">Get Started Today</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finance Calculator Modal -->
+    <div id="financeCalculatorModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('financeCalculatorModal')">&times;</span>
+            <h2 style="text-align: center; color: var(--gold); margin-bottom: 30px;">🧮 Car Finance Calculator</h2>
+            
+            <div style="background: linear-gradient(135deg, #252525, #1a1a1a); padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333;">
+                <h3 style="color: var(--gold); margin-bottom: 20px; text-align: center;">Calculate Your Monthly Payment</h3>
+                
+                <!-- Car Price -->
+                <label style="color: #ccc; margin-bottom: 8px; display: block;">🚗 Car Price ($)</label>
+                <input type="number" id="financeCarPrice" placeholder="e.g. 50000" value="50000" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 20px;" oninput="calculateLoan()">
+                
+                <!-- Down Payment -->
+                <label style="color: #ccc; margin-bottom: 8px; display: block;">💰 Down Payment ($)</label>
+                <input type="number" id="downPayment" placeholder="e.g. 10000" value="10000" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 20px;" oninput="calculateLoan()">
+                
+                <!-- Interest Rate -->
+                <label style="color: #ccc; margin-bottom: 8px; display: block;">📊 Annual Interest Rate (%)</label>
+                <input type="number" id="interestRate" placeholder="e.g. 5.5" step="0.1" value="5.5" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 20px;" oninput="calculateLoan()">
+                
+                <!-- Loan Term -->
+                <label style="color: #ccc; margin-bottom: 8px; display: block;">📅 Loan Term (Years)</label>
+                <select id="loanTerm" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 20px;" onchange="calculateLoan()">
+                    <option value="1">1 Year</option>
+                    <option value="2">2 Years</option>
+                    <option value="3">3 Years</option>
+                    <option value="4">4 Years</option>
+                    <option value="5" selected>5 Years</option>
+                    <option value="6">6 Years</option>
+                    <option value="7">7 Years</option>
+                    <option value="8">8 Years</option>
+                </select>
+                
+                <!-- Calculate Button -->
+                <button onclick="calculateLoan()" class="btn-gold" style="width: 100%; padding: 15px; font-size: 16px; font-weight: bold; margin-bottom: 20px;">
+                    🧮 Calculate Payment
+                </button>
+                
+                <!-- Results Section -->
+                <div id="loanResults" style="display: none; background: linear-gradient(135deg, #1e1e1e, #252525); padding: 20px; border-radius: 12px; border: 2px solid var(--gold);">
+                    <h4 style="color: var(--gold); margin-bottom: 15px; text-align: center;">💳 Payment Breakdown</h4>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div style="text-align: center; padding: 10px; background: #111; border-radius: 8px;">
+                            <div style="color: #888; font-size: 12px; margin-bottom: 5px;">Monthly Payment</div>
+                            <div id="monthlyPayment" style="color: #4dff88; font-size: 20px; font-weight: bold;">$0</div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: #111; border-radius: 8px;">
+                            <div style="color: #888; font-size: 12px; margin-bottom: 5px;">Total Interest</div>
+                            <div id="totalInterest" style="color: #ff6b6b; font-size: 20px; font-weight: bold;">$0</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div style="text-align: center; padding: 10px; background: #111; border-radius: 8px;">
+                            <div style="color: #888; font-size: 12px; margin-bottom: 5px;">Loan Amount</div>
+                            <div id="loanAmount" style="color: #fff; font-size: 18px; font-weight: bold;">$0</div>
+                        </div>
+                        <div style="text-align: center; padding: 10px; background: #111; border-radius: 8px;">
+                            <div style="color: #888; font-size: 12px; margin-bottom: 5px;">Total Payment</div>
+                            <div id="totalPayment" style="color: #fff; font-size: 18px; font-weight: bold;">$0</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Examples -->
+                <div style="margin-top: 20px; padding: 15px; background: #111; border-radius: 10px;">
+                    <h4 style="color: var(--gold); margin-bottom: 10px; font-size: 14px;">📝 Quick Examples:</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button onclick="setExampleValues(50000, 10000, 4.5, 5)" style="background: #333; color: #fff; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                            $50K Car<br><small>20% down, 4.5% APR</small>
+                        </button>
+                        <button onclick="setExampleValues(75000, 15000, 5.5, 5)" style="background: #333; color: #fff; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                            $75K Car<br><small>20% down, 5.5% APR</small>
+                        </button>
+                        <button onclick="setExampleValues(100000, 20000, 6.0, 5)" style="background: #333; color: #fff; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                            $100K Car<br><small>20% down, 6.0% APR</small>
+                        </button>
+                        <button onclick="setExampleValues(120000, 30000, 5.0, 6)" style="background: #333; color: #fff; border: none; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                            $120K Car<br><small>25% down, 5.0% APR</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <p style="color: #888; font-size: 12px; margin-bottom: 15px;">
+                    💡 This calculator provides estimates only. Actual rates may vary based on credit score, lender terms, and other factors.
+                </p>
+                <button onclick="closeModal('financeCalculatorModal')" class="auth-btn" style="background: #6c757d;">
+                    Close Calculator
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Car Details Full Page -->
+    <div id="carDetailsFullPage" class="car-details-full-page">
+        <div class="car-details-header">
+            <button class="car-details-back-btn" onclick="closeCarDetailsPage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </button>
+        </div>
+        <div class="car-details-content">
+            <!-- Image Navigation -->
+            <div class="car-image-container">
+                <button id="prevImageBtn" class="nav-arrow prev" onclick="prevImage()" style="display: none;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <img id="carDetailsMainImage" class="car-details-main-image" src="" alt="Car Image">
+                <button id="nextImageBtn" class="nav-arrow next" onclick="nextImage()" style="display: none;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="imageNavDots" class="car-image-nav"></div>
+            
+            <h1 id="carDetailsTitle" class="car-details-title"></h1>
+            <div id="carDetailsPrice" class="car-details-price"></div>
+
+            <div id="carDetailsSeller" class="car-details-seller" style="display:none;"></div>
+            
+            <!-- Like Section -->
+            <div class="car-details-like-section">
+                <button id="carDetailsLikeBtn" class="car-details-like-btn" onclick="handleLikeClick()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span id="carDetailsLikeCount">0</span>
+                </button>
+            </div>
+            
+            <div id="carDetailsInfoGrid" class="car-details-info-grid"></div>
+            
+            <a id="carDetailsWaBtn" class="car-details-wa-btn" href="#" target="_blank">
+                Contact via WhatsApp
+            </a>
+
+            <button id="carDetailsChatBtn" class="btn-outline" style="display:none; width:100%;" onclick="startChatWithSeller()">Chat with Seller</button>
+            
+            <button id="carDetailsEditBtn" class="btn-outline" style="display:none; width:100%; background:#27ae60; border: 2px solid #2ecc71; box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3); color:white;" onclick="editCarFromDetails()">Edit Listing ✏️</button>
+            
+            <div class="comments-section">
+                <div class="comments-section-title">
+                    Comments
+                    <span id="commentsCount" class="comments-count">0</span>
+                </div>
+                
+                <div id="loginPrompt" class="login-prompt" style="display: none;">
+                    <p class="login-prompt-text">Please sign in to post comments</p>
+                    <button class="login-prompt-btn" onclick="openSignIn();">Sign In</button>
+                </div>
+                
+                <!-- Comment Form -->
+                <div id="commentFormContainer" class="comment-form" style="display: none;">
+                    <div class="comment-form-title">Leave a Comment</div>
+                    <div class="comment-input-group">
+                        <div id="commentFormAvatar" class="comment-user-avatar">
+                            <svg viewBox="0 0 24 24" fill="#000">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                            </svg>
+                        </div>
+                        <div class="comment-input-wrapper">
+                            <textarea id="commentInput" class="comment-textarea" placeholder="Write your comment here..."></textarea>
+                            <button id="submitCommentBtn" class="comment-submit-btn" onclick="submitComment()">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                </svg>
+                                Post Comment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- No Comments Message -->
+                <div id="noComments" class="no-comments">
+                    <div class="no-comments-icon">💬</div>
+                    <p class="no-comments-text">No comments yet. Be the first to comment!</p>
+                </div>
+                
+                <!-- Comments List -->
+                <div id="commentsList" class="comments-list"></div>
+            </div>
+            
+            <!-- Other Cars Section -->
+            <div class="other-cars-section">
+                <h2 id="otherCarsTitle" class="other-cars-title">Similar Cars</h2>
+                <div id="otherCarsGrid" class="other-cars-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Page Profile -->
+    <div id="profileFullPage" class="profile-full-page">
+        <div class="profile-page-header">
+            <button class="profile-back-btn" onclick="closeProfilePage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </button>
+        </div>
+        <div class="profile-page-content">
+            <div class="profile-header">
+                <div class="profile-pic-container">
+                    <img id="profileFullAvatar" class="profile-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D4AF37'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" alt="Profile">
+                    <label for="profilePicInput" class="profile-pic-upload-btn">
+                        <svg viewBox="0 0 24 24" fill="black">
+                            <path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/>
+                        </svg>
+                    </label>
+                    <input type="file" id="profilePicInput" accept="image/*" onchange="handleProfilePicChange(event)">
+                </div>
+                <div id="profileFullName" class="profile-name"></div>
+                <div id="profileFullEmail" class="profile-email"></div>
+                <div id="profileFullPhone" class="profile-phone"></div>
+            </div>
+            
+            <div class="profile-stats">
+                <div class="profile-stat">
+                    <div id="profileListingsCount" class="profile-stat-number">0</div>
+                    <div class="profile-stat-label">Listings</div>
+                </div>
+                <div class="profile-stat">
+                    <div id="profileActiveCount" class="profile-stat-number">0</div>
+                    <div class="profile-stat-label">Active</div>
+                </div>
+                <div class="profile-stat">
+                    <div id="profileViewsCount" class="profile-stat-number">0</div>
+                    <div class="profile-stat-label">Views</div>
+                </div>
+            </div>
+            
+            <div class="profile-actions">
+                <a href="sell.html" class="btn-gold">+ Add New Listing</a>
+            </div>
+            
+            <div class="profile-section-title">My Listings</div>
+            <div id="profileFullCarsGrid" class="profile-cars-grid"></div>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <span style="float: right; font-size: 30px; cursor: pointer; color: var(--gold);" onclick="closeModal('profileModal')">&times;</span>
+            
+            <div class="profile-header">
+                <img id="profileAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D4AF37'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" class="profile-avatar" alt="Profile">
+                <div class="profile-name" id="profileName">User Name</div>
+                <div class="profile-email" id="profileEmail">user@email.com</div>
+                <div class="profile-phone" id="profilePhone">+962700000000</div>
+            </div>
+            
+            <div class="profile-section-title">🚗 My Listings</div>
+            <div id="profileCarsGrid" class="profile-cars-grid"></div>
+        </div>
+    </div>
+
+    <!-- Favorites Panel (Slide-in from right) -->
+    <div id="favoritesPanel" class="favorites-panel">
+        <div class="favorites-panel-header">
+            <h2>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                My Favorites
+            </h2>
+            <button class="favorites-panel-close" onclick="toggleFavoritesPanel()">&times;</button>
+        </div>
+        <div class="favorites-panel-content">
+            <div id="favoritesGrid" class="favorites-grid"></div>
+        </div>
+    </div>
+
+    <!-- Favorites Full Page -->
+    <div id="favoritesFullPage" class="favorites-full-page">
+        <div class="favorites-page-header">
+            <button class="favorites-back-btn" onclick="closeFavoritesPage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+                Back
+            </button>
+        </div>
+        <div class="favorites-page-content">
+            <h1 class="favorites-page-title">❤️ My Favorites</h1>
+            <div id="favoritesFullPageGrid" class="favorites-page-grid"></div>
+        </div>
+    </div>
+
+
+    <script src="js/extra.js"></script>
+    <script src="js/ai.js" defer></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module">
+      const __p = new URLSearchParams(location.search);
+      const whenCars = (cb) => { if (window.__gwCarsLoaded) cb(); else window.addEventListener('gw:cars', cb, { once: true }); };
+      const whenAuth = (cb) => { if (window.__gwAuthReady) cb(); else window.addEventListener('gw:auth', cb, { once: true }); };
+      const whenReady = (cb) => { if (window.renderCarDetails) cb(); else setTimeout(() => whenReady(cb), 30); };
+      whenReady(() => {
+        if (__p.get('filter') === 'mine') whenAuth(() => window.showMyCars && window.showMyCars());
+      });
+    </script>
+</body>
+</html>

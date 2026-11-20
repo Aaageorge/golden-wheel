@@ -1,0 +1,54 @@
+# نفس ترويسات الأمان الموجودة في ملف _headers، لمن يفضّل استخدام netlify.toml.
+# استخدم أحد الملفين فقط (كلاهما يعطي نفس النتيجة على Netlify).
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[build.environment]
+  # هذه القيم عامة بطبيعتها وتظهر في كود الصفحة، فلا يعتبرها فاحص الأسرار تسريبًا.
+  # المفاتيح السرّية (Stripe / Service Account) تبقى تحت الفحص.
+  SECRETS_SCAN_OMIT_KEYS = "FIREBASE_API_KEY,FIREBASE_DATABASE_URL,SITE_URL"
+
+[functions]
+  node_bundler = "esbuild"
+
+# استيراد مخزون المعارض تلقائيًا أربع مرات يوميًا.
+[functions."import-feeds"]
+  schedule = "0 */6 * * *"
+
+# منع نشر ملفات الإعداد/التوثيق حتى لو رُفعت بالخطأ إلى مجلد الموقع.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/index.html"
+  status = 404
+  force = true
+
+
+[[redirects]]
+  from = "/database.rules.json"
+  to = "/index.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/SECURITY_SETUP.md"
+  to = "/index.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*.md"
+  to = "/index.html"
+  status = 404
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://www.google.com https://www.recaptcha.net https://*.firebaseio.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.google.com https://www.recaptcha.net https://www.gstatic.com; frame-src https://candlecars-42b49.firebaseapp.com https://apis.google.com https://accounts.google.com https://www.google.com https://www.recaptcha.net; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"

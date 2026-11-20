@@ -1,0 +1,7 @@
+{
+  "name": "golden-wheel-cars",
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0"
+  }
+}
